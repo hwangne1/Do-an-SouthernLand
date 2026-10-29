@@ -1,69 +1,133 @@
 {% extends 'base.html' %}
-
-{% block title %} | User Dashboard {% endblock %}
+{% load humanize %}
+{% block title %}Bảng điều khiển | Southern Land{% endblock %}
 
 {% block content %}
-<section id="showcase-inner" class="py-5 text-white">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md-12">
-          <h1 class="display-4">User Dashboard</h1>
-          <p class="lead">Manage your  Real Estate account</p>
-        </div>
+<!-- Page Header -->
+<section class="sl-dashboard-hero">
+  <div class="container">
+    <div class="sl-dashboard-hero-content">
+      <span class="sl-about-eyebrow" style="color: var(--sl-gold);">KHÔNG GIAN CÁ NHÂN</span>
+      <h1 class="display-4">Bảng điều khiển</h1>
+      <p class="lead">Quản lý tài khoản và theo dõi các bất động sản bạn đã quan tâm.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Breadcrumb -->
+<section id="bc" class="sl-breadcrumb-section">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'index' %}"><i class="fas fa-home"></i> Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Bảng điều khiển</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<!-- Main Content -->
+<section class="sl-dashboard-content">
+  <div class="container">
+    
+    <!-- Alerts -->
+    {% include 'partials/_alerts.html' %}
+
+    <div class="sl-dashboard-card">
+      <div class="sl-dashboard-header">
+        <h2>Chào mừng trở lại, <span>{{ user.first_name|default:user.username }}</span>!</h2>
+        <p>Dưới đây là danh sách các bất động sản mà bạn đã gửi yêu cầu tư vấn.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- Breadcrumb -->
-  <section id="bc" class="mt-3">
-    <div class="container">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="{% url 'index' %}">
-              <i class="fas fa-home"></i> Home</a>
-          </li>
-          <li class="breadcrumb-item active"> Dashboard</li>
-        </ol>
-      </nav>
-    </div>
-  </section>
-
-  <!-- Alerts -->
-  {% include 'partials/_alerts.html' %}
-
-  <section id="dashboard" class="py-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Welcome {{ user.first_name }}</h2>
-          {% if contacts %}
-            <p>Here are the property listings that you have inquired about</p>
-            <table class="table">
-              <thead>
+      {% if contacts %}
+        <div class="sl-table-responsive">
+          <table class="sl-table">
+            <thead>
+              <tr>
+                <th scope="col" width="100">Mã YC</th>
+                <th scope="col">Bất động sản</th>
+                <th scope="col" class="text-right">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for contact in contacts %}
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Property</th>
-                  <th></th>
+                  <td><span class="sl-badge">#{{ contact.id }}</span></td>
+                  <td><strong class="sl-listing-title">{{ contact.listing }}</strong></td>
+                  <td class="text-right">
+                    <a class="sl-btn sl-btn-sm sl-btn-outline" href="{% url 'listing' contact.listing_id %}">
+                      Xem chi tiết <i class="fas fa-arrow-right"></i>
+                    </a>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {% for contact in contacts %}
-                  <tr>
-                    <td>{{ contact.id }}</td>
-                    <td>{{ contact.listing }}</td>
-                    <td>
-                      <a class="btn btn-light" href="{% url 'listing' contact.listing_id %}">View Listing</a>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          {% else %}
-            <p>You have not made any inquiries</p>
-          {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-      </div>
+      {% else %}
+        <!-- Empty State -->
+        <div class="sl-empty-state">
+          <div class="sl-empty-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <h3>Chưa có yêu cầu nào</h3>
+          <p>Bạn chưa gửi yêu cầu tư vấn cho bất động sản nào. Hãy khám phá những căn hộ tuyệt vời của chúng tôi.</p>
+          <a href="{% url 'listings' %}" class="sl-btn sl-btn-primary mt-3">Khám phá Bất động sản</a>
+        </div>
+      {% endif %}
     </div>
-  </section>
-  {% endblock %}
+    
+  </div>
+</section>
+    <!-- BẢNG DANH SÁCH YÊU THÍCH -->
+    <div class="sl-dashboard-card" style="margin-top: 30px;">
+      <div class="sl-dashboard-header">
+        <h2>Bất động sản đã lưu <i class="fas fa-heart" style="color: var(--sl-gold);"></i></h2>
+        <p>Những bất động sản bạn đang quan tâm.</p>
+      </div>
+
+      {% if favorites %}
+        <div class="sl-table-responsive">
+          <table class="sl-table">
+            <thead>
+              <tr>
+                <th scope="col">Bất động sản</th>
+                <th scope="col">Giá</th>
+                <th scope="col" class="text-right">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for fav in favorites %}
+                <tr>
+                  <td>
+                    <strong class="sl-listing-title">{{ fav.listing.title }}</strong><br>
+                    <small style="color: var(--sl-slate);"><i class="fas fa-map-marker-alt"></i> {{ fav.listing.city }}</small>
+                  </td>
+                  <td><span style="color: var(--sl-gold); font-weight: 700;">${{ fav.listing.price|intcomma }}</span></td>
+                  <td class="text-right">
+                    <a class="sl-btn sl-btn-sm sl-btn-outline" href="{% url 'listing' fav.listing.id %}">
+                      Xem
+                    </a>
+                    <!-- Nút Bỏ lưu (Dùng chung hàm toggle_favorite) -->
+                    <form action="{% url 'toggle_favorite' fav.listing.id %}" method="POST" style="display: inline-block;">
+                      {% csrf_token %}
+                      <button type="submit" class="sl-btn sl-btn-sm sl-btn-outline" title="Bỏ lưu" style="color: var(--sl-error); border-color: var(--sl-error);">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p style="color: var(--sl-slate); text-align: center; padding: 20px 0;">Bạn chưa lưu bất động sản nào.</p>
+      {% endif %}
+    </div>
+{% endblock %}

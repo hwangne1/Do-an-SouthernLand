@@ -1,160 +1,255 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %} {% load humanize %} {% block title %} | Southern Land
+- Bất động sản{% endblock %} {% block content %}
 
-{% load humanize %}
+<!-- Hero: Giới thiệu và tìm kiếm -->
+<section class="sl-hero">
+  <div class="container">
+    <div class="sl-hero-content">
+      <span class="sl-eyebrow">SOUTHERN LAND · KHÔNG GIAN SỐNG CỦA BẠN</span>
 
-{% block title %} | Welcome {% endblock %}
+      <h1>
+        Tìm nơi ở lý tưởng.<br />
+        <span>Bắt đầu từ hôm nay.</span>
+      </h1>
 
-{% block content %}
-<!-- Showcase -->
-<section id="showcase">
-    <div class="container text-center">
-      <div class="home-search p-5">
-        <div class="overlay p-5">
-          <h1 class="display-4 mb-4" >
-            <strong>Quality Price Location</strong> 
-          </h1>
-          <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae quas, asperiores eveniet vel nostrum magnam
-            voluptatum tempore! Consectetur, id commodi!</p>
-          <div class="search">
-            <form action="{% url 'search' %}">
-              <!-- Form Row 1 -->
-              <div class="form-row">
-                <div class="col-md-4 mb-3">
-                  <label class="sr-only">Keywords</label>
-                  <input type="text" name="keywords" class="form-control" placeholder="Keyword (Pool, Garage, etc)">
-                </div>
+      <p>
+        Khám phá những bất động sản phù hợp với nhu cầu và ngân sách của bạn.
+        Chúng tôi giúp hành trình tìm kiếm ngôi nhà mới trở nên đơn giản hơn.
+      </p>
 
-                <div class="col-md-4 mb-3">
-                  <label class="sr-only">City</label>
-                  <input type="text" name="city" class="form-control" placeholder="City">
-                </div>
+      <!-- Form tìm kiếm: giữ nguyên URL và các trường Django -->
+      <div class="sl-search-panel">
+        <h2 class="h5 mb-4">Tìm kiếm bất động sản</h2>
 
-                <div class="col-md-4 mb-3">
-                  <label class="sr-only">State</label>
-                  <select name="state" class="form-control">
-                    <option selected="true" disabled="disabled">State (All)</option>
-                    {% for key,value in state_choices.items %}
-                      <option value="{{ key }}">{{ value }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-              <!-- Form Row 2 -->
-              <div class="form-row">
-                <div class="col-md-6 mb-3">
-                  <label class="sr-only">Bedrooms</label>
-                  <select name="bedrooms" class="form-control">
-                    <option selected="true" disabled="disabled">Bedrooms (All)</option>
-                    {% for key,value in bedroom_choices.items %}
-                      <option value="{{ key }}">{{ value }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <select name="price" class="form-control" id="type">
-                    <option selected="true" disabled="disabled">Max Price (Any)</option>
-                    {% for key,value in price_choices.items %}
-                      <option value="{{ key }}">{{ value }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-              <button class="btn btn-secondary btn-block mt-4" type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-<br>
-  <!-- Alerts -->
-  {% include 'partials/_alerts.html' %}
-
-  <!-- Listings -->
-  <section id="listings" class="py-5">
-    <div class="container">
-      <h3 class="text-center mb-3">Latest Listings</h3>
-      <div class="row">
-        {% if listings %}
-          {% for listing in listings %}
-            <!-- Listing 1 -->
-            <div class="col-md-6 col-lg-4 mb-4">
-              <div class="card listing-preview">
-                <img class="card-img-top" src="{{ listing.photo_main.url }}" alt="">
-                <div class="card-img-overlay">
-                  <h2>
-                    <span class="badge badge-secondary text-white">${{ listing.price | intcomma }}</span>
-                  </h2>
-                </div>
-                <div class="card-body">
-                  <div class="listing-heading text-center">
-                    <h4 class="text-primary">{{ listing.title }}</h4>
-                    <p>
-                      <i class="fas fa-map-marker text-secondary"></i> {{ listing.city }} {{ listing.state }}, {{ listing.zipcode }}</p>
-                  </div>
-                  <hr>
-                  <div class="row py-2 text-secondary">
-                    <div class="col-6">
-                      <i class="fas fa-th-large"></i> Sqft: {{ listing.sqft }}</div>
-                    <div class="col-6">
-                      <i class="fas fa-car"></i> Garage: {{ listing.garage }}</div>
-                  </div>
-                  <div class="row py-2 text-secondary">
-                    <div class="col-6">
-                      <i class="fas fa-bed"></i> Bedrooms: {{ listing.bedrooms }}</div>
-                    <div class="col-6">
-                      <i class="fas fa-bath"></i> Bathrooms: {{ listing.bathrooms }}</div>
-                  </div>
-                  <hr>
-                  <div class="row py-2 text-secondary">
-                    <div class="col-6">
-                      <i class="fas fa-user"></i> {{ listing.realtor }}</div>
-                  </div>
-                  <div class="row text-secondary pb-2">
-                    <div class="col-6">
-                      <i class="fas fa-clock"></i> {{ listing.list_date | timesince }}</div>
-                  </div>
-                  <hr>
-                  <a href="{% url 'listing' listing.id %}" class="btn btn-primary btn-block">More Info</a>
-                </div>
-              </div>
+        <form action="{% url 'search' %}" method="get">
+          <div class="form-row">
+            <div class="col-md-4 mb-3">
+              <label for="sl-keywords">Từ khóa</label>
+              <input
+                id="sl-keywords"
+                type="text"
+                name="keywords"
+                class="form-control"
+                placeholder="Ví dụ: hồ bơi, gara..."
+              />
             </div>
-          {% endfor %}
-        {% else %}
-          <div class="col-md-12">
-            <p>No Listings Available</p>
+
+            <div class="col-md-4 mb-3">
+              <label for="sl-city">Thành phố</label>
+              <input
+                id="sl-city"
+                type="text"
+                name="city"
+                class="form-control"
+                placeholder="Nhập thành phố"
+              />
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label for="sl-state">Khu vực</label>
+              <select id="sl-state" name="state" class="form-control">
+                <option value="" selected>Tất cả khu vực</option>
+                {% for key, value in state_choices.items %}
+                <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
           </div>
-        {% endif %}
 
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <label for="sl-bedrooms">Số phòng ngủ</label>
+              <select id="sl-bedrooms" name="bedrooms" class="form-control">
+                <option value="" selected>Tất cả số phòng</option>
+                {% for key, value in bedroom_choices.items %}
+                <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="sl-price">Ngân sách tối đa</label>
+              <select id="sl-price" name="price" class="form-control">
+                <option value="" selected>Không giới hạn</option>
+                {% for key, value in price_choices.items %}
+                <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn sl-search-btn btn-block">
+            <i class="fas fa-search mr-2"></i>
+            Tìm bất động sản
+          </button>
+        </form>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="services" class="py-5 bg-secondary text-white">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md-4">
-          <i class="fas fa-comment fa-4x mr-4"></i>
-          <hr>
-          <h3>Consulting Services</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste consequatur
-            hic dignissimos ratione ea quae.</p>
+<!-- Thông báo Django -->
+<div class="container">{% include 'partials/_alerts.html' %}</div>
+
+<!-- Danh sách bất động sản mới nhất -->
+<section class="sl-listings py-5">
+  <div class="container">
+    <div class="sl-section-heading">
+      <div>
+        <span class="sl-eyebrow">LỰA CHỌN NỔI BẬT</span>
+        <h2>Bất động sản mới nhất</h2>
+        <p class="mb-0">
+          Khám phá những không gian có thể trở thành ngôi nhà tiếp theo của bạn.
+        </p>
+      </div>
+
+      <a href="{% url 'listings' %}" class="sl-view-all">
+        Xem tất cả <i class="fas fa-arrow-right ml-1"></i>
+      </a>
+    </div>
+
+    <div class="row">
+      {% if listings %} {% for listing in listings %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <article class="card sl-property-card h-100">
+          <a
+            href="{% url 'listing' listing.id %}"
+            aria-label="Xem {{ listing.title }}"
+          >
+            {% if listing.photo_main %}
+            <img
+              class="sl-property-image"
+              src="{{ listing.photo_main.url }}"
+              alt="{{ listing.title }}"
+              loading="lazy"
+            />
+            {% else %}
+            <div
+              class="sl-property-image d-flex align-items-center justify-content-center"
+            >
+              <span class="text-muted">
+                <i class="fas fa-home fa-3x"></i>
+              </span>
+            </div>
+            {% endif %}
+          </a>
+
+          <div class="sl-price">${{ listing.price|intcomma }}</div>
+
+          <div class="card-body d-flex flex-column">
+            <div class="sl-property-location">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              {{ listing.city }}, {{ listing.state }}
+            </div>
+
+            <h3 class="sl-property-title">
+              <a
+                href="{% url 'listing' listing.id %}"
+                class="text-decoration-none"
+              >
+                {{ listing.title }}
+              </a>
+            </h3>
+
+            <p class="sl-property-address">{{ listing.zipcode }}</p>
+
+            <div class="sl-property-features">
+              <span>
+                <i class="fas fa-bed mr-1"></i>
+                {{ listing.bedrooms }} phòng ngủ
+              </span>
+              <span>
+                <i class="fas fa-bath mr-1"></i>
+                {{ listing.bathrooms }} phòng tắm
+              </span>
+              <span>
+                <i class="fas fa-ruler-combined mr-1"></i>
+                {{ listing.sqft }} sqft
+              </span>
+              <span>
+                <i class="fas fa-car mr-1"></i>
+                {{ listing.garage }} gara
+              </span>
+            </div>
+
+            <div class="sl-property-footer mt-auto">
+              <span>
+                <i class="fas fa-user mr-1"></i>
+                {{ listing.realtor }}
+              </span>
+              <span>{{ listing.list_date|timesince }}</span>
+            </div>
+
+            <a
+              href="{% url 'listing' listing.id %}"
+              class="btn btn-block mt-3 sl-search-btn"
+            >
+              Xem chi tiết <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+          </div>
+        </article>
+      </div>
+      {% endfor %} {% else %}
+      <div class="col-12">
+        <div class="text-center py-5">
+          <i class="fas fa-home fa-3x mb-3 text-muted"></i>
+          <h3>Chưa có bất động sản</h3>
+          <p class="text-muted mb-0">
+            Các bất động sản sẽ được hiển thị tại đây khi có dữ liệu.
+          </p>
         </div>
-        <div class="col-md-4">
-          <i class="fas fa-home fa-4x mr-4"></i>
-          <hr>
-          <h3>Propery Management</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste consequatur
-            hic dignissimos ratione ea quae.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Dịch vụ -->
+<section class="sl-services py-5">
+  <div class="container">
+    <div class="sl-services-heading text-center">
+      <span class="sl-eyebrow">ĐỒNG HÀNH CÙNG BẠN</span>
+      <h2>Giải pháp bất động sản</h2>
+      <p>
+        Hỗ trợ bạn trong quá trình tìm kiếm, lựa chọn và quản lý bất động sản.
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="sl-service-card">
+          <i class="fas fa-comments"></i>
+          <h3>Tư vấn bất động sản</h3>
+          <p>
+            Cung cấp thông tin và hỗ trợ bạn cân nhắc lựa chọn phù hợp với nhu
+            cầu thực tế.
+          </p>
         </div>
-        <div class="col-md-4">
-          <i class="fas fa-suitcase fa-4x mr-4"></i>
-          <hr>
-          <h3>Renting</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste consequatur
-            hic dignissimos ratione ea quae.</p>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="sl-service-card">
+          <i class="fas fa-building"></i>
+          <h3>Quản lý bất động sản</h3>
+          <p>
+            Hỗ trợ quản lý thông tin và theo dõi các nhu cầu liên quan đến bất
+            động sản.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="sl-service-card">
+          <i class="fas fa-key"></i>
+          <h3>Mua bán và cho thuê</h3>
+          <p>
+            Khám phá các lựa chọn bất động sản và tìm kiếm phương án phù hợp với
+            kế hoạch của bạn.
+          </p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 {% endblock %}

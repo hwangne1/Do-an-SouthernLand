@@ -1,99 +1,162 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %} {% load static %} {% block title %}Giới thiệu |
+Southern Land{% endblock %} {% block content %}
+<section class="sl-about-hero">
+  <div class="sl-about-hero-overlay"></div>
+  <div class="sl-about-hero-content">
+    <span class="sl-about-eyebrow">SOUTHERN LAND</span>
+    <h1>Kiến tạo không gian sống lý tưởng</h1>
+    <p>Đồng hành cùng bạn trên hành trình tìm kiếm ngôi nhà phù hợp.</p>
+  </div>
+</section>
 
-{% load static %}
+<section class="sl-about-breadcrumb">
+  <div class="container">
+    <a href="{% url 'index' %}">Trang chủ</a>
+    <span>/</span>
+    <span>Giới thiệu</span>
+  </div>
+</section>
 
-{% block title %} | About Us {% endblock %}
-
-{% block content %}
-<section id="showcase-inner" class="py-5 text-white">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md-12">
-          <h1 class="display-4">About Real Estate</h1>
-          <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sunt, pariatur!</p>
+<section class="sl-about-intro">
+  <div class="container">
+    <div class="sl-about-intro-grid">
+      <div class="sl-about-image">
+        <img
+          src="{% static 'img/about.jpg' %}"
+          alt="Không gian sống Southern Land"
+        />
+        <div class="sl-about-image-caption">
+          <span>Southern Land</span>
+          <p>Không gian phù hợp, lựa chọn an tâm</p>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Breadcrumb -->
-  <section id="bc" class="mt-3">
-    <div class="container">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="{% url 'index' %}">
-              <i class="fas fa-home"></i> Home</a>
-          </li>
-          <li class="breadcrumb-item active"> About</li>
-        </ol>
-      </nav>
+      <div class="sl-about-copy">
+        <span class="sl-about-eyebrow">VỀ CHÚNG TÔI</span>
+        <h2>Hành trình tìm kiếm tổ ấm bắt đầu từ đây</h2>
+        <div class="sl-about-line"></div>
+        <p>
+          Southern Land mang đến không gian để bạn khám phá các lựa chọn bất
+          động sản và tìm kiếm nơi phù hợp với nhu cầu của mình.
+        </p>
+        <p>
+          Chúng tôi hướng đến trải nghiệm tìm kiếm rõ ràng, thuận tiện, giúp bạn
+          dễ dàng tham khảo thông tin và lựa chọn bất động sản phù hợp với kế
+          hoạch của bản thân và gia đình.
+        </p>
+        <a href="{% url 'listings' %}" class="sl-about-button">
+          Khám phá bất động sản <span>→</span>
+        </a>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="about" class="py-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8">
-          <h2>We Search For The Perfect Home</h2>
-          <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sunt, pariatur!</p>
-          <img src="{% static 'img/about.jpg' %}" alt="">
-          <p class="mt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis esse officia repudiandae ad saepe ex, amet
-            neque quod accusamus rem quia magnam magni dolorum facilis ullam minima perferendis? Exercitationem at quaerat
-            commodi id libero eveniet harum perferendis laborum molestias quia.</p>
+<section class="sl-about-values">
+  <div class="container">
+    <div class="sl-about-section-heading">
+      <span class="sl-about-eyebrow">GIÁ TRỊ CỦA CHÚNG TÔI</span>
+      <h2>Đặt trải nghiệm của bạn lên hàng đầu</h2>
+      <p>
+        Những điều chúng tôi hướng đến trong hành trình tìm kiếm bất động sản.
+      </p>
+    </div>
+
+    <div class="sl-about-value-grid">
+      <div class="sl-about-value-card">
+        <span class="sl-about-value-number">01</span>
+        <h3>Minh bạch</h3>
+        <p>
+          Thông tin bất động sản được trình bày rõ ràng để bạn thuận tiện tham
+          khảo.
+        </p>
+      </div>
+
+      <div class="sl-about-value-card">
+        <span class="sl-about-value-number">02</span>
+        <h3>Thuận tiện</h3>
+        <p>Tìm kiếm và lọc các lựa chọn theo nhu cầu ngay trên website.</p>
+      </div>
+
+      <div class="sl-about-value-card">
+        <span class="sl-about-value-number">03</span>
+        <h3>Đồng hành</h3>
+        <p>
+          Giúp bạn tiếp cận thông tin liên hệ để chủ động tìm hiểu thêm về bất
+          động sản.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if mvp_realtors %}
+<section class="sl-about-featured">
+  <div class="container">
+    <div class="sl-about-section-heading">
+      <span class="sl-about-eyebrow">ĐỘI NGŨ NỔI BẬT</span>
+      <h2>Nhân sự tiêu biểu</h2>
+    </div>
+
+    <div class="sl-about-featured-grid">
+      {% for realtor in mvp_realtors %}
+      <div class="sl-about-featured-card">
+        <img src="{{ realtor.photo.url }}" alt="{{ realtor.name }}" />
+        <div class="sl-about-featured-info">
+          <span>NHÂN SỰ NỔI BẬT</span>
+          <h3>{{ realtor.name }}</h3>
+          <p>{{ realtor.description }}</p>
         </div>
-        <div class="col-md-4">
-          {% if mvp_realtors %}
-            {% for realtor in mvp_realtors %}
-            <div class="card">
-                <img class="card-img-top" src="{{ realtor.photo.url }}" alt="Seller of the month">
-                <div class="card-body">
-                  <h5 class="card-title">Seller Of The Month</h5>
-                  <h6 class="text-secondary">{{ realtor.name }}</h6>
-                  <p class="card-text">{{ realtor.description }}
-                  </p>
-                </div>
-              </div>
-            {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="sl-about-cta">
+  <div class="container">
+    <span class="sl-about-eyebrow">SOUTHERN LAND</span>
+    <h2>Tìm kiếm bất động sản phù hợp với bạn</h2>
+    <p>Bắt đầu khám phá những lựa chọn đang có trên hệ thống.</p>
+    <a
+      href="{% url 'listings' %}"
+      class="sl-about-button sl-about-button-light"
+    >
+      Xem danh sách bất động sản <span>→</span>
+    </a>
+  </div>
+</section>
+
+<section class="sl-about-team">
+  <div class="container">
+    <div class="sl-about-section-heading">
+      <span class="sl-about-eyebrow">ĐỘI NGŨ</span>
+      <h2>Những người đồng hành cùng bạn</h2>
+      <p>Thông tin nhân sự được hiển thị từ dữ liệu hiện có trên hệ thống.</p>
+    </div>
+
+    <div class="sl-about-team-grid">
+      {% if realtors %} {% for realtor in realtors %}
+      <div class="sl-about-team-card">
+        <img src="{{ realtor.photo.url }}" alt="{{ realtor.name }}" />
+        <div class="sl-about-team-info">
+          <h3>{{ realtor.name }}</h3>
+          <span>Chuyên viên bất động sản</span>
+          <div class="sl-about-team-divider"></div>
+          {% if realtor.phone %}
+          <p><span>Điện thoại</span> {{ realtor.phone }}</p>
+          {% endif %} {% if realtor.email %}
+          <p><span>Email</span> {{ realtor.email }}</p>
           {% endif %}
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Work -->
-  <section id="work" class="bg-dark text-white text-center">
-    <h2 class="display-4">We Work For You</h2>
-    <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem velit aperiam, unde aliquid at similique!</h4>
-    <hr>
-    <a href="{% url 'listings' %}" class="btn btn-secondary text-white btn-lg">View Our Featured Listings</a>
-  </section>
-
-  <!-- Team -->
-  <section id="team" class="py-5">
-    <div class="container">
-      <h2 class="text-center">Our Team</h2>
-      <div class="row text-center">
-        {% if realtors %}
-          {% for realtor in realtors %}
-          <div class="col-md-4">
-              <img src="{{ realtor.photo.url }}" alt="" class="rounded-circle mb-3">
-              <h4>{{ realtor.name }}</h4>
-              <p class="text-success">
-                <i class="fas fa-award text-success mb-3"></i> Realtor</p>
-              <hr>
-              <p>
-                <i class="fas fa-phone"></i> {{ realtor.phone }}</p>
-              <p>
-                <i class="fas fa-envelope-open"></i> {{ realtor.email }}</p>
-            </div>
-          {% endfor %}
-        {% else %}
-          <div class="col-md-12">
-            <p>No Realtors Available</p>
-          </div>
-        {% endif %}       
+      {% endfor %} {% else %}
+      <div class="sl-about-empty">
+        Hiện chưa có thông tin nhân sự để hiển thị.
       </div>
+      {% endif %}
     </div>
-  </section>
+  </div>
+</section>
 {% endblock %}

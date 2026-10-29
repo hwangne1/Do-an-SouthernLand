@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from contacts.models import Contact
-
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from accounts.models import Favorite
+from listings.models import Listing
 # Create your views here.
 def login(request):
     if request.method == 'POST':
@@ -72,5 +74,45 @@ def dashboard(request):
 
     context = {
         'contacts': user_contacts
+    }
+    return render(request, 'accounts/dashboard.html', context)
+
+@login_required
+def toggle_favorite(request, listing_id):
+    if request.method != 'POST':
+        return redirect('listings')
+
+    listing = get_object_or_404(
+        Listing,
+        id=listing_id,
+        is_published=True
+    )
+
+    favorite = Favorite.objects.filter(
+        user=request.user,
+        listing=listing
+    )
+
+    if favorite.exists():
+        favorite.delete()
+        messages.success(request, 'Đã bỏ bất động sản khỏi danh sách yêu thích.')
+    else:
+        Favorite.objects.create(
+            user=request.user,
+            listing=listing
+        )
+        messages.success(request, 'Đã thêm bất động sản vào danh sách yêu thích.')
+
+    return redirect(request.META.get('HTTP_REFERER', '/listings/'))
+def dashboard(request):
+    # Lấy danh sách liên hệ
+    contacts = Contact.objects.filter(user_id=request.user.id)
+    
+    # LẤY DANH SÁCH YÊU THÍCH
+    favorites = Favorite.objects.filter(user=request.user).select_related('listing')
+
+    context = {
+        'contacts': contacts,
+        'favorites': favorites, # Truyền ra template
     }
     return render(request, 'accounts/dashboard.html', context)

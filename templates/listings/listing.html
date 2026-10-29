@@ -1,209 +1,237 @@
 {% extends 'base.html' %}
-
 {% load humanize %}
 
-{% block title %} | {{ listing.title }} {% endblock %}
+{% block title %} | {{ listing.title }}{% endblock %}
 
 {% block content %}
-<section id="showcase-inner" class="py-5 text-white">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md-12">
-          <h1 class="display-4">{{ listing.title }}</h1>
-          <p class="lead">
-            <i class="fas fa-map-marker"></i> {{ listing.city }} {{ listing.state }}, {{ listing.zipcode }}</p>
-        </div>
+<!-- Hero Section -->
+<section class="sl-detail-hero">
+  <div class="container">
+    <nav class="sl-detail-breadcrumb" aria-label="Điều hướng">
+      <a href="{% url 'index' %}">Trang chủ</a>
+      <span>/</span>
+      <a href="{% url 'listings' %}">Bất động sản</a>
+      <span>/</span>
+      <span>{{ listing.title }}</span>
+    </nav>
+
+    <div class="sl-detail-heading-wrap">
+      <div class="sl-detail-heading-text">
+        <span class="sl-detail-eyebrow">THÔNG TIN BẤT ĐỘNG SẢN</span>
+        <h1>{{ listing.title }}</h1>
+        <p class="sl-detail-location">
+          <i class="fas fa-map-marker-alt"></i> {{ listing.city }}, {{ listing.state }} {{ listing.zipcode }}
+        </p>
       </div>
-    </div>
-  </section>
-
-  <!-- Breadcrumb -->
-  <section id="bc" class="mt-3">
-    <div class="container">
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="{% url 'index' %}">Home</a>
-          </li>
-          <li class="breadcrumb-item">
-            <a href="{% url 'listings' %}">Listings</a>
-          </li>
-          <li class="breadcrumb-item active">{{ listing.title }}</li>
-        </ol>
-      </nav>
-    </div>
-  </section>
-
-  <!-- Alerts -->
-  {% include 'partials/_alerts.html' %}
-
-  <!-- Listing -->
-  <section id="listing" class="py-4">
-    <div class="container">
-      <a href="{% url 'listings' %}" class="btn btn-light mb-4">Back To Listings</a>
-      <div class="row">
-        <div class="col-md-9">
-          <!-- Home Main Image -->
-          <img src="{{ listing.photo_main.url }}" alt="" class="img-main img-fluid mb-3">
-          <!-- Thumbnails -->
-          <div class="row mb-5 thumbs">
-            {% if listing.photo_1 %}
-            <div class="col-md-2">
-              <a href="{{ listing.photo_1.url }}" data-lightbox="home-images">
-                <img src="{{ listing.photo_1.url }}" alt="" class="img-fluid">
-              </a>
-            </div>
-            {% endif %}
-            {% if listing.photo_2 %}
-            <div class="col-md-2">
-              <a href="{{ listing.photo_2.url }}" data-lightbox="home-images">
-                <img src="{{ listing.photo_2.url }}" alt="" class="img-fluid">
-              </a>
-            </div>
-            {% endif %}
-            {% if listing.photo_3 %}
-            <div class="col-md-2">
-              <a href="{{ listing.photo_3.url }}" data-lightbox="home-images">
-                <img src="{{ listing.photo_3.url }}" alt="" class="img-fluid">
-              </a>
-            </div>
-            {% endif %}
-            {% if listing.photo_4 %}
-            <div class="col-md-2">
-              <a href="{{ listing.photo_4.url }}" data-lightbox="home-images">
-                <img src="{{ listing.photo_4.url }}" alt="" class="img-fluid">
-              </a>
-            </div>
-            {% endif %}
-            {% if listing.photo_5 %}
-            <div class="col-md-2">
-              <a href="{{ listing.photo_5.url }}" data-lightbox="home-images">
-                <img src="{{ listing.photo_5.url }}" alt="" class="img-fluid">
-              </a>
-            </div>
-            {% endif %}
-            {% if listing.photo_6 %}
-            <div class="col-md-2">
-              <a href="{{ listing.photo_6.url }}" data-lightbox="home-images">
-                <img src="{{ listing.photo_6.url }}" alt="" class="img-fluid">
-              </a>
-            </div>
-            {% endif %}
-          </div>
-          <!-- Fields -->
-          <div class="row mb-5 fields">
-            <div class="col-md-6">
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item text-secondary">
-                  <i class="fas fa-money-bill-alt"></i> Asking Price:
-                  <span class="float-right">${{ listing.price | intcomma }}</span>
-                </li>
-                <li class="list-group-item text-secondary">
-                  <i class="fas fa-bed"></i> Bedrooms:
-                  <span class="float-right">{{ listing.bedrooms }}</span>
-                </li>
-                <li class="list-group-item text-secondary">
-                  <i class="fas fa-bath"></i> Bathrooms:
-                  <span class="float-right">{{ listing.bathrooms }}</span>
-                </li>
-                <li class="list-group-item text-secondary">
-                  <i class="fas fa-car"></i> Garage:
-                  <span class="float-right">{{ listing.garage }}
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-6">
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item text-secondary">
-                  <i class="fas fa-th-large"></i> Square Feet:
-                  <span class="float-right">{{ listing.sqft }}</span>
-                </li>
-                <li class="list-group-item text-secondary">
-                  <i class="fas fa-square"></i> Lot Size:
-                  <span class="float-right">{{ listing.lot_size }} Acres
-                  </span>
-                </li>
-                <li class="list-group-item text-secondary">
-                  <i class="fas fa-calendar"></i> Listing Date:
-                  <span class="float-right">{{ listing.list_date }}</span>
-                </li>
-                <li class="list-group-item text-secondary">
-                  <i class="fas fa-bed"></i> Realtor:
-                  <span class="float-right">{{ listing.realtor }}
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Description -->
-          <div class="row mb-5">
-            <div class="col-md-12">
-                {{ listing.description }}
-            </div>
-          </div>
+      
+      <div class="sl-detail-action-wrap">
+        <div class="sl-detail-price">
+          <span>Giá niêm yết</span>
+          <strong>${{ listing.price|intcomma }}</strong>
         </div>
-        <div class="col-md-3">
-          <div class="card mb-3">
-            <img class="card-img-top" src="{{ listing.realtor.photo.url }}" alt="">
-            <div class="card-body">
-              <h5 class="card-title">Property Realtor</h5>
-              <h6 class="text-secondary">{{ listing.realtor }}</h6>
-              <p class="text-secondary">We can take care of comfort and quality</p>
-            </div>
-          </div>
-          <button class="btn-primary btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Book Now</button>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Inquiry Modal -->
-  <div class="modal fade" id="inquiryModal" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="inquiryModalLabel">Make An Inquiry</h5>
-          <button type="button" class="close" data-dismiss="modal">
-            <span>&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form action="{% url 'contact' %}" method="POST">
-            {% csrf_token %}
-            {% if user.is_authenticated %}
-              <input type="hidden" name="user_id" value="{{ user.id }}">
-            {% else %}
-              <input type="hidden" name="user_id" value="0">
-            {% endif %}
-            <input type="hidden" name="realtor_email" value="{{ listing.realtor.email }}">
-            <input type="hidden" name="listing_id" value="{{ listing.id }}">
-            <div class="form-group">
-              <label for="property_name" class="col-form-label">Property:</label>
-              <input type="text" name="listing" class="form-control" value="{{ listing.title }}">
-            </div>
-            <div class="form-group">
-              <label for="name" class="col-form-label">Name:</label>
-              <input type="text" name="name" class="form-control" {% if user.is_authenticated %} value="{{ user.first_name }} {{ user.last_name }}" {% endif %} required>
-            </div>
-            <div class="form-group">
-              <label for="email" class="col-form-label">Email:</label>
-              <input type="email" name="email" class="form-control" {% if user.is_authenticated %} value="{{ user.email }}" {% endif %} required>
-            </div>
-            <div class="form-group">
-              <label for="phone" class="col-form-label">Phone:</label>
-              <input type="text" name="phone" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="message" class="col-form-label">Message:</label>
-              <textarea name="message" class="form-control"></textarea>
-            </div>
-            <hr>
-            <input type="submit" value="Send" class="btn btn-block btn-secondary">
-          </form>
-        </div>
+                    <div class="sl-detail-favorite">
+  {% if user.is_authenticated %}
+    <form action="{% url 'toggle_favorite' listing.id %}" method="POST">
+      {% csrf_token %}
+      
+      {% if is_favorited %}
+        <button type="submit" class="sl-fav-btn is-favorited" title="Bấm để bỏ yêu thích">
+          <i class="fas fa-heart"></i> Đã yêu thích
+        </button>
+      {% else %}
+        <button type="submit" class="sl-fav-btn" title="Thêm vào danh sách yêu thích">
+          <i class="far fa-heart"></i> Lưu yêu thích
+        </button>
+      {% endif %}
+
+    </form>
+  {% else %}
+    <a href="{% url 'login' %}" class="sl-fav-btn" title="Đăng nhập để yêu thích">
+      <i class="far fa-heart"></i> Lưu yêu thích
+    </a>
+  {% endif %}
+</div>
       </div>
     </div>
   </div>
+</section>
+
+{% include 'partials/_alerts.html' %}
+
+<!-- Main Content -->
+<section class="sl-detail-section">
+  <div class="container">
+    <a href="{% url 'listings' %}" class="sl-detail-back">
+      <i class="fas fa-arrow-left"></i> Quay lại danh sách
+    </a>
+
+    <div class="row">
+      <!-- Left Column: Gallery & Info -->
+      <div class="col-lg-8">
+        <!-- Gallery -->
+        <div class="sl-detail-gallery">
+          {% if listing.photo_main %}
+          <a href="{{ listing.photo_main.url }}" data-lightbox="sl-property" class="sl-main-img-link">
+            <img class="sl-detail-main-image" src="{{ listing.photo_main.url }}" alt="{{ listing.title }}">
+          </a>
+          {% else %}
+          <div class="sl-detail-no-image">
+            <i class="fas fa-home"></i>
+            <span>Chưa có hình ảnh bất động sản</span>
+          </div>
+          {% endif %}
+
+          <div class="sl-detail-thumbnails">
+            {% if listing.photo_1 %}<a href="{{ listing.photo_1.url }}" data-lightbox="sl-property"><img src="{{ listing.photo_1.url }}" alt="Ảnh 1"></a>{% endif %}
+            {% if listing.photo_2 %}<a href="{{ listing.photo_2.url }}" data-lightbox="sl-property"><img src="{{ listing.photo_2.url }}" alt="Ảnh 2"></a>{% endif %}
+            {% if listing.photo_3 %}<a href="{{ listing.photo_3.url }}" data-lightbox="sl-property"><img src="{{ listing.photo_3.url }}" alt="Ảnh 3"></a>{% endif %}
+            {% if listing.photo_4 %}<a href="{{ listing.photo_4.url }}" data-lightbox="sl-property"><img src="{{ listing.photo_4.url }}" alt="Ảnh 4"></a>{% endif %}
+            {% if listing.photo_5 %}<a href="{{ listing.photo_5.url }}" data-lightbox="sl-property"><img src="{{ listing.photo_5.url }}" alt="Ảnh 5"></a>{% endif %}
+            {% if listing.photo_6 %}<a href="{{ listing.photo_6.url }}" data-lightbox="sl-property"><img src="{{ listing.photo_6.url }}" alt="Ảnh 6"></a>{% endif %}
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="sl-detail-card">
+          <h2>Thông tin chi tiết</h2>
+          <p class="sl-detail-muted">Các thông số cơ bản của bất động sản</p>
+
+          <div class="sl-detail-features">
+            <div class="sl-detail-feature">
+              <div class="sl-feat-icon"><i class="fas fa-bed"></i></div>
+              <div><span>Phòng ngủ</span><strong>{{ listing.bedrooms }}</strong></div>
+            </div>
+            <div class="sl-detail-feature">
+              <div class="sl-feat-icon"><i class="fas fa-bath"></i></div>
+              <div><span>Phòng tắm</span><strong>{{ listing.bathrooms }}</strong></div>
+            </div>
+            <div class="sl-detail-feature">
+              <div class="sl-feat-icon"><i class="fas fa-car"></i></div>
+              <div><span>Chỗ để xe</span><strong>{{ listing.garage }}</strong></div>
+            </div>
+            <div class="sl-detail-feature">
+              <div class="sl-feat-icon"><i class="fas fa-ruler-combined"></i></div>
+              <div><span>Diện tích</span><strong>{{ listing.sqft }} m²</strong></div>
+            </div>
+            <div class="sl-detail-feature">
+              <div class="sl-feat-icon"><i class="fas fa-vector-square"></i></div>
+              <div><span>Diện tích đất</span><strong>{{ listing.lot_size }} acres</strong></div>
+            </div>
+            <div class="sl-detail-feature">
+              <div class="sl-feat-icon"><i class="fas fa-calendar-alt"></i></div>
+              <div><span>Ngày đăng</span><strong>{{ listing.list_date|date:"d/m/Y" }}</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="sl-detail-card">
+          <h2>Mô tả bất động sản</h2>
+          <div class="sl-detail-description">
+            {{ listing.description|linebreaks }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Agent Info -->
+      <div class="col-lg-4">
+        <aside class="sl-detail-agent sticky-top" style="top: 100px;">
+          {% if listing.realtor.photo %}
+          <img class="sl-detail-agent-photo" src="{{ listing.realtor.photo.url }}" alt="{{ listing.realtor }}">
+          {% else %}
+          <div class="sl-detail-agent-placeholder">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          {% endif %}
+
+          <span class="sl-detail-eyebrow">ĐỒNG HÀNH CÙNG BẠN</span>
+          <h2>{{ listing.realtor }}</h2>
+          <p>Liên hệ với chúng tôi để được tư vấn thêm về bất động sản này.</p>
+
+          <div class="sl-detail-agent-info">
+            <i class="fas fa-envelope"></i>
+            <span>{{ listing.realtor.email }}</span>
+          </div>
+
+          <button type="button" class="sl-detail-contact-btn" data-toggle="modal" data-target="#inquiryModal">
+            <i class="fas fa-paper-plane"></i> Gửi yêu cầu tư vấn
+          </button>
+
+          <div class="sl-detail-trust">
+            <i class="fas fa-shield-alt"></i>
+            <span>Thông tin được cung cấp để hỗ trợ quá trình tìm kiếm bất động sản của bạn.</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Inquiry Modal -->
+<div class="modal fade" id="inquiryModal" tabindex="-1" role="dialog" aria-labelledby="inquiryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content sl-detail-modal">
+      <div class="modal-header">
+        <div>
+          <span class="sl-detail-eyebrow">SOUTHERN LAND</span>
+          <h5 class="modal-title" id="inquiryModalLabel">Yêu cầu tư vấn</h5>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="sl-detail-muted" style="margin-bottom: 20px;">
+          Để lại thông tin, chúng tôi sẽ tiếp nhận yêu cầu của bạn.
+        </p>
+
+        <form action="{% url 'contact' %}" method="POST" class="sl-inquiry-form">
+          {% csrf_token %}
+          
+          {% if user.is_authenticated %}
+          <input type="hidden" name="user_id" value="{{ user.id }}">
+          {% else %}
+          <input type="hidden" name="user_id" value="0">
+          {% endif %}
+
+          <input type="hidden" name="realtor_email" value="{{ listing.realtor.email }}">
+          <input type="hidden" name="listing_id" value="{{ listing.id }}">
+
+          <div class="form-group">
+            <label for="property_name">Bất động sản</label>
+            <input id="property_name" type="text" name="listing" class="form-control" value="{{ listing.title }}" readonly style="background-color: #F8F6F1; cursor: not-allowed;">
+          </div>
+
+          <div class="form-group">
+            <label for="inquiry_name">Họ và tên</label>
+            <input id="inquiry_name" type="text" name="name" class="form-control" 
+                   value="{% if user.is_authenticated %}{{ user.first_name }} {{ user.last_name }}{% endif %}" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inquiry_email">Email</label>
+            <input id="inquiry_email" type="email" name="email" class="form-control" 
+                   value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inquiry_phone">Số điện thoại</label>
+            <input id="inquiry_phone" type="text" name="phone" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="inquiry_message">Nội dung cần tư vấn</label>
+            <textarea id="inquiry_message" name="message" class="form-control" rows="4" placeholder="Tôi muốn tìm hiểu thêm về bất động sản này..."></textarea>
+          </div>
+
+          <button type="submit" class="sl-detail-contact-btn" style="width: 100%; margin-top: 10px;">
+            Gửi yêu cầu <i class="fas fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -1,90 +1,82 @@
 {% load static %}
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="{% url 'index' %}">
-        <img src="" class="logo" alt="">
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <ul class="navbar-nav">
-          <li
-            {% if '/' == request.path %}
-              class="nav-item active mr-3"
-            {% else %}
-              class="nav-item mr-3"
-            {% endif %}
-          >
-            <a class="nav-link" href="{% url 'index' %}">Home</a>
-          </li>
-          <li
-            {% if 'about' in request.path %}
-              class="nav-item active mr-3"
-            {% else %}
-              class="nav-item mr-3"
-            {% endif %}
-          >
-            <a class="nav-link" href="{% url 'about' %}">About</a>
-          </li>
-          <li
-            {% if 'listings' in request.path %}
-              class="nav-item active mr-3"
-            {% else %}
-              class="nav-item mr-3"
-            {% endif %}
-          >
-            <a class="nav-link" href="{% url 'listings' %}">Featured Listings</a>
-          </li>
-        </ul>
 
-        <ul class="navbar-nav ml-auto">
-          {% if user.is_authenticated %}
-            <li
-            {% if 'dashboard' in request.path %}
-              class="nav-item active mr-3"
-            {% else %}
-              class="nav-item mr-3"
-            {% endif %}
-            >
-              <a class="nav-link" href="{% url 'dashboard' %}">
-               Welcome {{ user.username }} (Dashboard)</a>
-            </li>
-            <li class="nav-item mr-3">
-              <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
-                <i class="fas fa-sign-out-alt"></i> Logout
-              </a>
-              <form action="{% url 'logout' %}" method="POST" id="logout">
-                {% csrf_token %}
-                <input type="hidden">
-              </form>
-            </li>
-          {% else %}
-            <li
-            {% if 'register' in request.path %}
-              class="nav-item active mr-3"
-            {% else %}
-              class="nav-item mr-3"
-            {% endif %}
-            >
-              <a class="nav-link" href="{% url 'register' %}">
-                <i class="fas fa-user-plus"></i> Register</a>
-            </li>
-            <li
-            {% if 'login' in request.path %}
-              class="nav-item active mr-3"
-            {% else %}
-              class="nav-item mr-3"
-            {% endif %}
-            >
-              <a class="nav-link" href="{% url 'login' %}">
-                <i class="fas fa-sign-in-alt"></i>
+<nav class="navbar navbar-expand-lg navbar-dark sl-navbar sticky-top">
+  <div class="container">
+    <!-- Thương hiệu -->
+        <a class="navbar-brand sl-brand" href="{% url 'index' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Southern Land Logo" class="sl-navbar-logo">
+    </a>
 
-                Login</a>
-            </li>
-          {% endif %}
-        </ul>
-      </div>
+    <!-- Nút menu trên điện thoại -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Mở menu điều hướng"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <!-- Menu chính -->
+      <ul class="navbar-nav ml-lg-4 sl-nav-links">
+        <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'index' %}">Trang chủ</a>
+        </li>
+
+        <li class="nav-item {% if 'about' in request.path %}active{% endif %}">
+          <a class="nav-link" href="{% url 'about' %}">Giới thiệu</a>
+        </li>
+
+        <li
+          class="nav-item {% if 'listings' in request.path %}active{% endif %}"
+        >
+          <a class="nav-link" href="{% url 'listings' %}">Bất động sản</a>
+        </li>
+      </ul>
+
+      <!-- Tài khoản -->
+      <ul class="navbar-nav ml-auto sl-account-links">
+        {% if user.is_authenticated %}
+        <li
+          class="nav-item {% if 'dashboard' in request.path %}active{% endif %}"
+        >
+          <a class="nav-link" href="{% url 'dashboard' %}">
+            <i class="fas fa-user-circle mr-1"></i>
+            {{ user.username }}
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a
+            href="javascript:document.getElementById('logout').submit()"
+            class="nav-link sl-account-action"
+          >
+            <i class="fas fa-sign-out-alt mr-1"></i> Đăng xuất
+          </a>
+
+          <form action="{% url 'logout' %}" method="POST" id="logout">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="/" />
+          </form>
+        </li>
+        {% else %}
+        <li class="nav-item {% if 'login' in request.path %}active{% endif %}">
+          <a class="nav-link" href="{% url 'login' %}"> Đăng nhập </a>
+        </li>
+
+        <li
+          class="nav-item sl-register-item {% if 'register' in request.path %}active{% endif %}"
+        >
+          <a class="nav-link sl-register-btn" href="{% url 'register' %}">
+            <i class="fas fa-user-plus mr-1"></i> Đăng ký
+          </a>
+        </li>
+        {% endif %}
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
